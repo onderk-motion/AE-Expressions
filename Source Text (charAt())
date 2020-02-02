@@ -1,0 +1,3 @@
+indx = 0;
+x = comp("Write Tab").layer("Text Holder").text.sourceText;
+x.charAt(indx)
