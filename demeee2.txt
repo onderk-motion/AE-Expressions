@@ -1,0 +1,2 @@
+x = thisComp.name.split(" ")[2]
+comp("Scene "+x).layer("Camera Animation").transform.position
