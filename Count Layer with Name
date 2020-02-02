@@ -1,0 +1,6 @@
+layerNumber = 0;//start the counting of layers at 0
+layerStartWith = "Cell";//the word with which the layers should start
+for(i=1;i<=thisComp.numLayers;i++){
+if (thisComp.layer(i).name.slice(0,layerStartWith.length) == layerStartWith) layerNumber =layerNumber +1;
+}
+layerNumber
