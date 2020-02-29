@@ -1,0 +1,27 @@
+s1 = thisComp.marker.key(1).time;
+e1 = thisComp.marker.key(1).duration;
+se1 = s1+e1
+s2 = thisComp.marker.key(2).time;
+e2 = thisComp.marker.key(2).duration;
+se2 = s2+e2
+s3 = thisComp.marker.key(3).time;
+e3 = thisComp.marker.key(3).duration;
+se3 = s3+e3
+
+function exp0(){
+return eval('thisComp.layer(\"p1\").transform.position');};
+function exp1(){
+return eval('thisComp.layer(\"p2\").transform.position');};
+function exp2(){
+return eval('thisComp.layer(\"p3\").transform.position');};
+
+function useKeyframes(){return eval('value');};
+if(time <= se1-1*thisComp.frameDuration){exp0()}
+else 
+if(time <= se2-1*thisComp.frameDuration){exp1()}
+else
+if(time <= se3-1*thisComp.frameDuration){exp2()}
+else
+if(time <= thisComp.duration){exp2()}
+else
+{value}
