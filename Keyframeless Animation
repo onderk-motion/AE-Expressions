@@ -1,0 +1,14 @@
+xStart = 0;
+xLand = 200;
+xEnd = 0;
+sIn = thisLayer.inPoint;
+eOut = thisLayer.outPoint;
+eIn = thisLayer.marker.key(1).time;
+sOut = thisLayer.marker.key(2).time;
+landIn = sIn+eIn;
+landOut = sOut,eOut;
+x = easeOut(time, inPoint, landIn, xStart, xLand);
+if (time >= landOut){
+x = easeIn(time, landOut, outPoint, xLand, xEnd);
+}
+[x, 200];
