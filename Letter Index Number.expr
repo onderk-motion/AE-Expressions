@@ -1,0 +1,16 @@
+var myText = comp("Your Text Here").layer("YOUR TEXT").text.sourceText;
+var firstChar = myText.charAt(effect("Character Index")("Slider")-1).toUpperCase();
+
+var alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+var numbers = "0123456789";
+
+var alphaIndex = alphabet.indexOf(firstChar) + 1;
+var numIndex = numbers.indexOf(firstChar) + 27;
+
+if (alphaIndex > 0) {
+    alphaIndex;
+} else if (numIndex > 26) {
+    numIndex;
+} else {
+    "Character not recognized";
+}
