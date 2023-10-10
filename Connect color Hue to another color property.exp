@@ -1,0 +1,5 @@
+src = content("Group 5").content("Fill 1").color;
+targt = rgbToHsl(src.value);
+hsla = rgbToHsl(value);
+hsla[0] = targt[0];
+hslToRgb(hsla)
