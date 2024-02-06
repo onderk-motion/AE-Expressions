@@ -1,0 +1,19 @@
+var delayy = 1;
+var delayFrames =  (delayy*4) * thisComp.frameDuration;
+
+var inStartTime = thisComp.marker.key(1).time + delayFrames;
+var inEndTime = inStartTime + thisComp.marker.key(1).duration - delayFrames;
+
+var outStartTime = thisComp.marker.key(2).time + delayFrames;
+var outEndTime = outStartTime + thisComp.marker.key(2).duration - delayFrames;
+var currentTime = time;
+
+if (currentTime >= inStartTime && currentTime <= inEndTime) {
+    linear(currentTime, inStartTime, inEndTime,   0,   3);
+} else if (currentTime >= outStartTime && currentTime <= outEndTime) {
+    linear(currentTime, outStartTime, outEndTime,   7,   10);
+} else if (currentTime < inStartTime || currentTime > outEndTime) {
+    0;
+} else {
+    currentTime;
+}
