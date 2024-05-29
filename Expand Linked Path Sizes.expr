@@ -1,0 +1,35 @@
+// Get the path from the source layer
+var sourcePath = mask("Mask 1").maskPath;
+
+// Define the expansion amounts for width and height
+var expandWidth = 20; // Expand width by 20 pixels
+var expandHeight = 20; // Expand height by 20 pixels
+
+// Get the points, inTangents, and outTangents of the original path
+var points = sourcePath.points();
+var inTangents = sourcePath.inTangents();
+var outTangents = sourcePath.outTangents();
+var isClosed = sourcePath.isClosed();
+
+// Calculate the center of the path by averaging the points
+var sumX = 0;
+var sumY = 0;
+for (var i = 0; i < points.length; i++) {
+    sumX += points[i][0];
+    sumY += points[i][1];
+}
+var centerX = sumX / points.length;
+var centerY = sumY / points.length;
+var center = [centerX, centerY];
+
+// Expand the points by scaling them away from the center
+var expandedPoints = points.map(function(pt) {
+    var offsetX = pt[0] - center[0];
+    var offsetY = pt[1] - center[1];
+    var scaledX = offsetX > 0 ? offsetX + expandWidth : offsetX - expandWidth;
+    var scaledY = offsetY > 0 ? offsetY + expandHeight : offsetY - expandHeight;
+    return [center[0] + scaledX, center[1] + scaledY];
+});
+
+// Create the new path with expanded points, same tangents, and closure
+createPath(expandedPoints, inTangents, outTangents, isClosed);
