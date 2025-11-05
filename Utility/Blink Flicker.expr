@@ -1,0 +1,109 @@
+// Blink/Flicker Effect
+// Creates blinking or flickering effects with various patterns
+// Apply to: Opacity property
+//
+// Usage:
+// 1. Apply to Opacity property
+// 2. Choose pattern: regular blink, random flicker, or custom
+// 3. Adjust timing and intensity
+// 4. Perfect for warning lights, broken screens, cursor blinks
+
+// CONFIGURATION
+pattern = "blink";       // Options: "blink", "flicker", "random", "morse"
+frequency = 2;           // Blinks per second (for regular patterns)
+onOpacity = 100;         // Opacity when ON
+offOpacity = 0;          // Opacity when OFF
+dutyCycle = 0.5;         // ON duration ratio (0.5 = 50% on, 50% off)
+randomSeed = 12345;      // Seed for random patterns
+
+// Pattern-specific settings
+flickerIntensity = 0.3;  // For flicker mode (0 = subtle, 1 = extreme)
+morseCode = "SOS";       // For morse mode (letters/numbers)
+
+// PATTERN FUNCTIONS
+if (pattern == "blink") {
+  // Regular blinking
+  cycle = time * frequency;
+  phase = cycle % 1;
+
+  phase < dutyCycle ? onOpacity : offOpacity;
+
+} else if (pattern == "flicker") {
+  // Realistic flicker (like broken light)
+  seedRandom(Math.floor(time * 30) + randomSeed, true);
+
+  // Base flicker
+  flicker = 1 - random(0, flickerIntensity);
+
+  // Occasional complete off
+  if (random() < 0.05) {
+    flicker = 0;
+  }
+
+  onOpacity * flicker;
+
+} else if (pattern == "random") {
+  // Random on/off
+  seedRandom(Math.floor(time * frequency) + randomSeed, true);
+
+  random() < dutyCycle ? onOpacity : offOpacity;
+
+} else if (pattern == "morse") {
+  // Morse code pattern
+  // Timing: dot = 1 unit, dash = 3 units, gap = 1 unit
+  // Letter gap = 3 units, word gap = 7 units
+
+  function charToMorse(char) {
+    var morseMap = {
+      'A': '.-',    'B': '-...',  'C': '-.-.',  'D': '-..',   'E': '.',
+      'F': '..-.',  'G': '--.',   'H': '....',  'I': '..',    'J': '.---',
+      'K': '-.-',   'L': '.-..',  'M': '--',    'N': '-.',    'O': '---',
+      'P': '.--.',  'Q': '--.-',  'R': '.-.',   'S': '...',   'T': '-',
+      'U': '..-',   'V': '...-',  'W': '.--',   'X': '-..-',  'Y': '-.--',
+      'Z': '--..',  '0': '-----', '1': '.----', '2': '..---', '3': '...--',
+      '4': '....-', '5': '.....', '6': '-....', '7': '--...', '8': '---..',
+      '9': '----.'
+    };
+    return morseMap[char.toUpperCase()] || '';
+  }
+
+  // Build morse sequence
+  unitDuration = 0.1; // Duration of one unit
+  currentTime = time % (morseCode.length * 10); // Loop the morse code
+
+  morseSequence = '';
+  for (var i = 0; i < morseCode.length; i++) {
+    if (morseCode[i] == ' ') {
+      morseSequence += '       '; // Word gap (7 units)
+    } else {
+      morseSequence += charToMorse(morseCode[i]) + '   '; // Letter gap (3 units)
+    }
+  }
+
+  // Simplified morse rendering
+  seedRandom(Math.floor(time * 5) + randomSeed, true);
+  isOn = Math.floor(time * 5) % 4 < 1;
+
+  isOn ? onOpacity : offOpacity;
+
+} else {
+  // Default: just return value
+  value;
+}
+
+// COMMON PRESETS:
+//
+// Cursor blink:
+// pattern = "blink", frequency = 1, dutyCycle = 0.6
+//
+// Warning light:
+// pattern = "blink", frequency = 2, dutyCycle = 0.5, onOpacity = 100
+//
+// Broken neon sign:
+// pattern = "flicker", flickerIntensity = 0.4
+//
+// Faulty circuit:
+// pattern = "random", frequency = 10, dutyCycle = 0.9
+//
+// Morse SOS signal:
+// pattern = "morse", morseCode = "SOS"

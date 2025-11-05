@@ -128,6 +128,83 @@ Maps layer time to composition markers for advanced timing control.
 
 ---
 
+### Easy Ease (Custom)
+**File:** `Animation/Easy Ease Custom.expr`
+**Apply to:** Any property
+
+Manual ease in/out control without keyframes. Create smooth animations with customizable easing curves.
+
+**Key Parameters:**
+- `easeIn` - Ease in amount (0 = linear, 100 = maximum)
+- `easeOut` - Ease out amount (0 = linear, 100 = maximum)
+- `duration` - Animation duration
+- `startValue` & `endValue` - Value range
+
+**Use Case:** Smooth transitions, custom timing curves, keyframe-free animation
+
+---
+
+### Overshoot
+**File:** `Animation/Overshoot.expr`
+**Apply to:** Position, Scale, Rotation, or any animated property
+
+Overshoots the target value and bounces back for an elastic, springy feel.
+
+**Key Parameters:**
+- `overshootAmount` - How much to overshoot (1.1 = 10% over)
+- `bounceSpeed` - Bounce frequency (1 = slow, 5 = fast)
+- `smoothness` - Bounce smoothness (0.5 = bouncy, 0.9 = smooth)
+
+**Use Case:** UI elements, elastic animations, organic motion
+
+---
+
+### Camera Shake
+**File:** `Animation/Camera Shake.expr`
+**Apply to:** Camera Position or Rotation (or any layer)
+
+Realistic camera shake for impact, earthquake, or explosion effects with natural decay.
+
+**Key Parameters:**
+- `intensity` - Shake strength (10 = subtle, 100 = extreme)
+- `frequency` - Shake speed (10 = slow, 30 = fast)
+- `decay` - Fade speed (1 = slow, 5 = quick)
+- `startTime` & `duration` - When and how long
+
+**Use Case:** Impact effects, explosions, earthquakes, action scenes
+
+---
+
+### Look At Camera
+**File:** `Animation/Look At Camera.expr`
+**Apply to:** Orientation property of 3D layer
+
+Automatically orients 3D layer to face camera or another layer - perfect for billboard effects.
+
+**Key Parameters:**
+- `mode` - Choose "camera" or "layer"
+- `targetLayerName` - Layer to look at (if mode is "layer")
+- `offsetX/Y/Z` - Rotation offsets
+
+**Use Case:** Billboard effect, characters looking at camera, directional elements
+
+---
+
+### Oscillate
+**File:** `Animation/Oscillate.expr`
+**Apply to:** Position, Rotation, Scale, or any numeric property
+
+Creates continuous back-and-forth motion like a pendulum with various wave types.
+
+**Key Parameters:**
+- `amplitude` - Range of motion
+- `frequency` - Speed of oscillation (1 = slow, 3 = fast)
+- `waveType` - Choose "sine", "triangle", "square", or "sawtooth"
+
+**Use Case:** Pendulums, floating objects, breathing effects, alarm lights
+
+---
+
 ## 📝 Text Expressions
 
 ### Text Counter
@@ -180,6 +257,52 @@ Advanced text character manipulation and extraction.
 
 ---
 
+### Typewriter Effect
+**File:** `Text/Typewriter Effect.expr`
+**Apply to:** Source Text property
+
+Types out text character by character like a typewriter with optional blinking cursor.
+
+**Key Parameters:**
+- `charsPerSecond` - Typing speed (5 = slow, 20 = fast)
+- `showCursor` - Display blinking cursor
+- `cursorChar` - Cursor character (default: "|")
+
+**Use Case:** Computer screens, subtitle effects, revealing text, retro effects
+
+---
+
+### Text Box Fitter
+**File:** `Text/Text Box Fitter.expr`
+**Apply to:** Scale or Size of shape layer behind text
+
+Automatically adjusts background box/shape size based on text length with smooth animation.
+
+**Key Parameters:**
+- `textLayerName` - Name of text layer to track
+- `padding` - Space around text (in pixels)
+- `animationSpeed` - How fast box adjusts (1 = slow, 10 = instant)
+
+**Use Case:** Dynamic buttons, animated labels, subtitle backgrounds, lower thirds
+
+---
+
+### Random Text Generator
+**File:** `Text/Random Text Generator.expr`
+**Apply to:** Source Text property
+
+Generates random characters for Matrix, hacking, glitch, or data visualization effects.
+
+**Key Parameters:**
+- `textLength` - Number of characters
+- `changeSpeed` - Character changes per second
+- `characterSet` - Characters to use (binary, hex, letters, symbols, etc.)
+- `groupSize` - Characters per group (0 = no grouping)
+
+**Use Case:** Matrix effect, hacking scenes, glitch text, data streams, security codes
+
+---
+
 ## 🎨 Color Expressions
 
 ### Connect Color Hue to Another Property
@@ -192,6 +315,53 @@ Links color hue values to another layer's color property for synchronized color 
 
 ---
 
+### RGB Separation
+**File:** `Color/RGB Separation.expr`
+**Apply to:** Position of duplicated layers
+
+Creates chromatic aberration/VHS glitch effect by separating RGB channels.
+
+**Key Parameters:**
+- `channel` - Set 0 (Red), 1 (Green), or 2 (Blue) for each layer
+- `separationAmount` - Pixel offset (3 = subtle, 15 = extreme)
+- `angle` - Separation direction (in degrees)
+
+**Use Case:** VHS effects, glitch art, chromatic aberration, retro looks
+
+**Setup:** Duplicate layer 3 times, apply expression with different channel values, use blend modes
+
+---
+
+### Color Cycle (Rainbow)
+**File:** `Color/Color Cycle Rainbow.expr`
+**Apply to:** Fill Color, Stroke Color, or any color property
+
+Smoothly cycles through rainbow colors or custom color palettes over time.
+
+**Key Parameters:**
+- `cycleMode` - Choose "rainbow" or "custom"
+- `cycleSpeed` - Cycles per second (0.5 = slow, 2 = fast)
+- `customColors` - Define custom color palette (for custom mode)
+
+**Use Case:** Neon signs, loading indicators, music visualizers, RGB lighting effects
+
+---
+
+### Brightness Based on Position
+**File:** `Color/Brightness Based on Position.expr`
+**Apply to:** Fill Color, Effect Color, or Opacity
+
+Changes brightness/opacity based on distance from a light source position.
+
+**Key Parameters:**
+- `lightPosition` - Light source position [X, Y]
+- `maxDistance` - Distance at which brightness reaches minimum
+- `falloffType` - Choose "linear", "quadratic", or "smooth"
+
+**Use Case:** Proximity lighting, spotlight effects, interactive lighting, depth effects
+
+---
+
 ## 🔷 Shape Expressions
 
 ### Expand Linked Path Sizes
@@ -201,6 +371,37 @@ Links color hue values to another layer's color property for synchronized color 
 Dynamically expands or contracts shape paths while maintaining proportions and linked relationships.
 
 **Use Case:** Responsive shapes, animated paths, scaling effects
+
+---
+
+### Auto Stroke Width
+**File:** `Shape/Auto Stroke Width.expr`
+**Apply to:** Stroke Width property
+
+Maintains consistent stroke width regardless of layer scale - perfect for responsive designs.
+
+**Key Parameters:**
+- `baseStrokeWidth` - Desired width in pixels (at 100% scale)
+- `scaleCompensation` - Enable/disable compensation
+- `inheritParentScale` - Account for parent layer scale
+
+**Use Case:** Logos with consistent line weight, icons, UI elements, technical drawings
+
+---
+
+### Path Trim Animator
+**File:** `Shape/Path Trim Animator.expr`
+**Apply to:** Trim Paths Start or End property
+
+Smoothly animates path trimming for line drawing and reveal effects with various easing options.
+
+**Key Parameters:**
+- `applyTo` - Choose "start" or "end"
+- `duration` - Animation duration
+- `direction` - Choose "forward" or "reverse"
+- `easeType` - Choose "linear", "smooth", or "bounce"
+
+**Use Case:** Line reveals, drawing animations, write-on effects, path animations
 
 ---
 
@@ -270,6 +471,83 @@ Formats numbers with leading zeros (1 → 01, 2 → 02, etc.).
 
 ---
 
+### Snap to Grid
+**File:** `Utility/Snap to Grid.expr`
+**Apply to:** Position property
+
+Snaps layer position to a grid system for pixel-perfect alignment and organized layouts.
+
+**Key Parameters:**
+- `gridSize` - Grid cell size in pixels (5, 10, 20, 50, etc.)
+- `snapX/Y/Z` - Enable/disable snapping per axis
+- `offset` - Grid origin offset
+
+**Use Case:** Pixel art, UI alignment, organized layouts, isometric grids
+
+---
+
+### Layer Sequencer
+**File:** `Utility/Layer Sequencer.expr`
+**Apply to:** Opacity, Position, Scale, or any property
+
+Automatically sequences animation across multiple layers based on index - perfect for cascading effects.
+
+**Key Parameters:**
+- `delayPerLayer` - Delay between each layer (in seconds)
+- `animationDuration` - How long each animation takes
+- `startValue` & `endValue` - Animation range
+- `reverseOrder` - Reverse sequence direction
+
+**Use Case:** Sequential reveals, cascading effects, stagger animations, menu animations
+
+---
+
+### Value Remap/Range
+**File:** `Utility/Value Remap Range.expr`
+**Apply to:** Any property
+
+Remaps values from one range to another (like Arduino's map function) - extremely versatile utility.
+
+**Key Parameters:**
+- `inputMin` & `inputMax` - Source value range
+- `outputMin` & `outputMax` - Target value range
+- `sourceValue` - Value to remap (can link to other properties)
+
+**Use Case:** Mapping sliders to properties, converting ranges, linking different property types
+
+---
+
+### Exponential Growth/Decay
+**File:** `Utility/Exponential Growth Decay.expr`
+**Apply to:** Any numeric property
+
+Creates exponential growth (viral spread) or decay (fade out) curves for dramatic effects.
+
+**Key Parameters:**
+- `mode` - Choose "growth" or "decay"
+- `rate` - Speed of change (1 = slow, 5 = fast)
+- `startValue` & `endValue` - Value range
+
+**Use Case:** Viral growth, social media counters, explosions, deceleration, signal loss
+
+---
+
+### Blink/Flicker
+**File:** `Utility/Blink Flicker.expr`
+**Apply to:** Opacity property
+
+Creates blinking or flickering effects with various patterns including morse code.
+
+**Key Parameters:**
+- `pattern` - Choose "blink", "flicker", "random", or "morse"
+- `frequency` - Blinks per second
+- `onOpacity` & `offOpacity` - On/off values
+- `dutyCycle` - ON duration ratio
+
+**Use Case:** Warning lights, broken screens, cursor blinks, morse signals, faulty electronics
+
+---
+
 ## 🚀 How to Use
 
 1. **Browse** the category folders to find the expression you need
@@ -289,11 +567,16 @@ Formats numbers with leading zeros (1 → 01, 2 → 02, etc.).
 
 ## 🤝 Contributing
 
-Have a useful expression to share? Feel free to contribute! Please ensure:
-- Code is well-commented
-- Include usage instructions
-- Follow the existing file structure
-- Use descriptive file names
+Have a useful expression to share? Contributions are welcome!
+
+**Guidelines:**
+- Code must be well-commented with clear explanations
+- Include usage instructions and parameter descriptions
+- Follow the existing file structure and naming conventions
+- Use descriptive file names with `.expr` extension
+- Test your expressions before submitting
+
+Open an issue or pull request to contribute your expressions!
 
 ## 📄 License
 

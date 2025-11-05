@@ -1,0 +1,56 @@
+// Camera Shake (Realistic Camera Shake)
+// Realistic camera shake for impact, earthquake, explosion effects
+// Apply to: Camera Position or Rotation (or any layer)
+//
+// Usage:
+// 1. Apply to Camera Position for positional shake
+// 2. Apply to Camera Orientation for rotational shake
+// 3. Trigger shake with startTime
+// 4. Adjust intensity and decay for different effects
+
+// CONFIGURATION
+startTime = 0;        // When shake starts (in seconds)
+duration = 2;         // How long the shake lasts (in seconds)
+intensity = 50;       // Shake intensity (10 = subtle, 100 = extreme)
+frequency = 20;       // Shake frequency/speed (10 = slow, 30 = fast)
+decay = 3;            // How quickly it fades (1 = slow fade, 5 = quick fade)
+randomSeed = 12345;   // Change for different shake pattern
+
+// SHAKE LOGIC
+if (time >= startTime && time < startTime + duration) {
+  // Calculate shake progress
+  t = time - startTime;
+  progress = t / duration;
+
+  // Decay envelope
+  envelope = Math.pow(1 - progress, decay);
+
+  // Multiple frequency layers for realistic shake
+  seedRandom(randomSeed, true);
+
+  shake1 = intensity * envelope * Math.sin(frequency * t * 2 * Math.PI + random(0, 100));
+  shake2 = intensity * 0.7 * envelope * Math.sin(frequency * 1.5 * t * 2 * Math.PI + random(0, 100));
+  shake3 = intensity * 0.4 * envelope * Math.sin(frequency * 2.3 * t * 2 * Math.PI + random(0, 100));
+
+  if (value instanceof Array) {
+    // For Position (2D/3D) or Rotation arrays
+    result = [];
+    for (i = 0; i < value.length; i++) {
+      seedRandom(randomSeed + i, true);
+      s1 = intensity * envelope * Math.sin(frequency * t * 2 * Math.PI + random(0, 100));
+      s2 = intensity * 0.7 * envelope * Math.sin(frequency * 1.5 * t * 2 * Math.PI + random(0, 100));
+      s3 = intensity * 0.4 * envelope * Math.sin(frequency * 2.3 * t * 2 * Math.PI + random(0, 100));
+
+      result[i] = value[i] + (s1 + s2 + s3) / 3;
+    }
+    result;
+  } else {
+    // For single values
+    value + (shake1 + shake2 + shake3) / 3;
+  }
+} else {
+  value;
+}
+
+// TIP: For impact shake, use high intensity with quick decay
+//      For earthquake, use medium intensity with slow decay

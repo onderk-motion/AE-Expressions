@@ -1,0 +1,77 @@
+// Value Remap/Range
+// Remaps a value from one range to another range (like Arduino's map function)
+// Apply to: Any property
+//
+// Usage:
+// 1. Apply to any property
+// 2. Define input range (what values you're reading)
+// 3. Define output range (what values you want)
+// 4. Optionally link to another property for dynamic remapping
+
+// CONFIGURATION
+// Input range
+inputMin = 0;
+inputMax = 100;
+
+// Output range
+outputMin = 50;
+outputMax = 200;
+
+// SOURCE VALUE
+// Option 1: Use property's own value
+sourceValue = value;
+
+// Option 2: Link to another property (uncomment to use)
+// sourceValue = thisComp.layer("Controller").transform.position[0];
+
+// Option 3: Use time
+// sourceValue = time;
+
+// Option 4: Use layer index
+// sourceValue = index;
+
+// CLAMP INPUT (optional)
+clampInput = true;  // Limit input to input range
+
+// REMAP FUNCTION
+function remap(value, inMin, inMax, outMin, outMax, clamp) {
+  // Clamp input if enabled
+  if (clamp) {
+    value = Math.max(inMin, Math.min(inMax, value));
+  }
+
+  // Calculate percentage through input range
+  var t = (value - inMin) / (inMax - inMin);
+
+  // Map to output range
+  return outMin + t * (outMax - outMin);
+}
+
+// APPLY REMAPPING
+if (sourceValue instanceof Array) {
+  // For array values (Position, Scale, etc.)
+  result = [];
+  for (i = 0; i < sourceValue.length; i++) {
+    result[i] = remap(sourceValue[i], inputMin, inputMax, outputMin, outputMax, clampInput);
+  }
+  result;
+} else {
+  // For single values
+  remap(sourceValue, inputMin, inputMax, outputMin, outputMax, clampInput);
+}
+
+// EXAMPLES:
+//
+// Map slider (0-100) to opacity (0-50):
+// inputMin=0, inputMax=100, outputMin=0, outputMax=50
+//
+// Map X position (0-1920) to rotation (0-360):
+// sourceValue = thisLayer.transform.position[0]
+// inputMin=0, inputMax=1920, outputMin=0, outputMax=360
+//
+// Map time (0-5 sec) to scale (100-200%):
+// sourceValue = time
+// inputMin=0, inputMax=5, outputMin=100, outputMax=200
+//
+// Invert a value (100 becomes 0, 0 becomes 100):
+// inputMin=0, inputMax=100, outputMin=100, outputMax=0

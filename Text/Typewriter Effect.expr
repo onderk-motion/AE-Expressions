@@ -1,0 +1,47 @@
+// Typewriter Effect
+// Types out text character by character like a typewriter
+// Apply to: Source Text property
+//
+// Usage:
+// 1. Write your full text in the Source Text
+// 2. Apply this expression
+// 3. Adjust speed (characters per second)
+// 4. Optionally add cursor character
+
+// CONFIGURATION
+charsPerSecond = 10;     // Typing speed (5 = slow, 20 = fast)
+startTime = 0;           // When typing starts (in seconds)
+showCursor = true;       // Show blinking cursor at end
+cursorChar = "|";        // Cursor character
+cursorBlinkSpeed = 2;    // Cursor blinks per second
+
+// Get full text
+fullText = text.sourceText;
+
+// Calculate how many characters to show
+if (time < startTime) {
+  numChars = 0;
+} else {
+  numChars = Math.floor((time - startTime) * charsPerSecond);
+  numChars = Math.min(numChars, fullText.length);
+}
+
+// Extract visible text
+visibleText = fullText.substr(0, numChars);
+
+// Add blinking cursor
+if (showCursor && numChars < fullText.length) {
+  // Blink cursor
+  cursorVisible = Math.floor((time - startTime) * cursorBlinkSpeed * 2) % 2;
+  if (cursorVisible) {
+    visibleText += cursorChar;
+  }
+}
+
+visibleText;
+
+// VARIATIONS:
+// For random typing speed variation, add:
+// seedRandom(numChars, true);
+// delay = random(-0.05, 0.05);
+// Before calculating numChars

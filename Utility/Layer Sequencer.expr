@@ -1,0 +1,76 @@
+// Layer Sequencer
+// Automatically sequences animation across multiple layers based on index
+// Apply to: Opacity, Position, Scale, or any animatable property
+//
+// Usage:
+// 1. Select multiple layers
+// 2. Apply this expression to desired property
+// 3. Animation will cascade based on layer index
+// 4. Perfect for sequential reveals, cascading effects
+
+// CONFIGURATION
+property = "opacity";      // What this expression controls
+delayPerLayer = 0.1;       // Delay between each layer (in seconds)
+animationDuration = 0.5;   // How long each layer's animation takes
+startTime = 0;             // When sequence begins
+reverseOrder = false;      // Reverse the sequence order
+
+// VALUE RANGES (adjust based on property)
+startValue = 0;            // Starting value (e.g., 0 for opacity)
+endValue = 100;            // Ending value (e.g., 100 for opacity)
+
+// For Position property, use arrays:
+// startValue = [0, 100];  // Offset position
+// endValue = [0, 0];      // Final position
+
+// CALCULATE THIS LAYER'S TIMING
+layerIndex = index;
+if (reverseOrder) {
+  // Get total number of layers (approximation)
+  layerIndex = thisComp.numLayers - index + 1;
+}
+
+thisLayerStartTime = startTime + (layerIndex - 1) * delayPerLayer;
+thisLayerEndTime = thisLayerStartTime + animationDuration;
+
+// CALCULATE PROGRESS
+if (time < thisLayerStartTime) {
+  progress = 0;
+} else if (time > thisLayerEndTime) {
+  progress = 1;
+} else {
+  progress = (time - thisLayerStartTime) / animationDuration;
+  // Ease the progress
+  progress = easeIn(0, 1, progress);
+}
+
+// CALCULATE VALUE
+if (startValue instanceof Array) {
+  // Array values (Position, Scale, etc.)
+  result = [];
+  for (i = 0; i < startValue.length; i++) {
+    result[i] = startValue[i] + (endValue[i] - startValue[i]) * progress;
+  }
+  result;
+} else {
+  // Single values (Opacity, Rotation, etc.)
+  startValue + (endValue - startValue) * progress;
+}
+
+// COMMON CONFIGURATIONS:
+//
+// Fade In Sequence:
+// property = "opacity", startValue = 0, endValue = 100
+//
+// Slide In From Bottom:
+// property = "position", startValue = [0, 100], endValue = [0, 0]
+// (Apply to Y position using: value[0], value[1] + offset)
+//
+// Scale Up Sequence:
+// property = "scale", startValue = [0, 0], endValue = [100, 100]
+//
+// Rotation Sequence:
+// property = "rotation", startValue = -90, endValue = 0
+
+// TIP: Select all layers, apply expression, adjust delayPerLayer
+// for perfect cascading animations without manual keyframing!

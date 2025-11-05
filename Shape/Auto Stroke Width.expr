@@ -1,0 +1,43 @@
+// Auto Stroke Width
+// Maintains consistent stroke width regardless of layer scale
+// Apply to: Stroke Width property of shape layer
+//
+// Usage:
+// 1. Apply to Stroke Width property
+// 2. Set desired strokeWidth
+// 3. Stroke will remain visually consistent when layer is scaled
+// 4. Useful for responsive designs and scaling animations
+
+// CONFIGURATION
+baseStrokeWidth = 5;  // Desired stroke width in pixels (at 100% scale)
+scaleCompensation = true;  // Compensate for layer scale
+inheritParentScale = true; // Also compensate for parent layer scale
+
+// GET SCALE
+layerScale = transform.scale;
+
+// Calculate average scale (handles non-uniform scaling)
+avgScale = (layerScale[0] + layerScale[1]) / 2 / 100;
+
+// Get parent scale if exists and inheritance is enabled
+if (inheritParentScale && hasParent) {
+  parentScale = parent.transform.scale;
+  avgParentScale = (parentScale[0] + parentScale[1]) / 2 / 100;
+  avgScale *= avgParentScale;
+}
+
+// Calculate compensated stroke width
+if (scaleCompensation && avgScale != 0) {
+  baseStrokeWidth / avgScale;
+} else {
+  baseStrokeWidth;
+}
+
+// USE CASES:
+// - Logos that scale but need consistent line weight
+// - Icons in responsive layouts
+// - UI elements that animate scale
+// - Technical drawings that need precise line weights
+//
+// NOTE: For paths created in Illustrator, this helps maintain
+// the original stroke width appearance at any composition scale
