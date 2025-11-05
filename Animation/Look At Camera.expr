@@ -1,0 +1,56 @@
+// Look At Camera/Layer
+// Automatically orients 3D layer to face camera or another layer
+// Apply to: Orientation property of a 3D layer
+//
+// Usage:
+// 1. Make sure your layer is 3D
+// 2. Apply to Orientation property
+// 3. Choose mode: "camera" or "layer"
+// 4. If using layer mode, set targetLayerName
+
+// CONFIGURATION
+mode = "camera";              // Options: "camera" or "layer"
+targetLayerName = "Target";   // Layer name if mode is "layer"
+offsetX = 0;                  // Rotation offset X (in degrees)
+offsetY = 0;                  // Rotation offset Y (in degrees)
+offsetZ = 0;                  // Rotation offset Z (in degrees)
+
+// LOOK AT LOGIC
+try {
+  // Get this layer's position
+  thisPos = transform.position;
+
+  // Get target position
+  if (mode == "camera") {
+    targetPos = thisComp.activeCamera.transform.position;
+  } else {
+    targetPos = thisComp.layer(targetLayerName).transform.position;
+  }
+
+  // Calculate direction vector
+  dx = targetPos[0] - thisPos[0];
+  dy = targetPos[1] - thisPos[1];
+  dz = targetPos[2] - thisPos[2];
+
+  // Calculate rotation angles
+  // Y rotation (left/right)
+  rotY = Math.atan2(dx, dz) * 180 / Math.PI;
+
+  // X rotation (up/down)
+  horizontalDist = Math.sqrt(dx*dx + dz*dz);
+  rotX = -Math.atan2(dy, horizontalDist) * 180 / Math.PI;
+
+  // Z rotation (roll) - usually 0 for look-at
+  rotZ = 0;
+
+  // Apply offsets
+  [rotX + offsetX, rotY + offsetY, rotZ + offsetZ];
+
+} catch(e) {
+  // If target not found or error, return current value
+  value;
+}
+
+// NOTE: This works best with 3D layers
+// For billboard effect (always face camera), use mode = "camera"
+// For character looking at object, use mode = "layer"

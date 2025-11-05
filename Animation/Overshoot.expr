@@ -1,0 +1,65 @@
+// Overshoot (Elastic Overshoot)
+// Overshoots the target value and bounces back - elastic feel
+// Apply to: Position, Scale, Rotation, or any animated property
+//
+// Usage:
+// 1. Create keyframes for your animation
+// 2. Apply this expression
+// 3. Adjust overshoot amount and bounce speed
+// 4. Works automatically with all keyframes
+
+// CONFIGURATION
+overshootAmount = 1.2; // How much to overshoot (1.1 = 10% over, 1.5 = 50% over)
+bounceSpeed = 3;       // How fast it bounces back (1 = slow, 5 = fast)
+smoothness = 0.7;      // Smoothness of bounce (0.5 = bouncy, 0.9 = smooth)
+
+// OVERSHOOT LOGIC
+if (numKeys > 0) {
+  n = 0;
+  if (numKeys > 0) {
+    n = nearestKey(time).index;
+    if (key(n).time > time) {
+      n--;
+    }
+  }
+
+  if (n > 0 && n < numKeys) {
+    // Between keyframes
+    t = time - key(n).time;
+    duration = key(n + 1).time - key(n).time;
+
+    if (time > key(n).time && time < key(n + 1).time) {
+      // Calculate overshoot
+      progress = t / duration;
+
+      // Overshoot curve
+      overshootCurve = Math.sin(progress * Math.PI * bounceSpeed) *
+                       Math.pow(1 - progress, 2) *
+                       (overshootAmount - 1);
+
+      // Get base value
+      baseValue = ease(key(n).value, key(n + 1).value, progress);
+
+      // Calculate overshoot direction
+      direction = key(n + 1).value - key(n).value;
+
+      if (direction instanceof Array) {
+        // For array values
+        result = [];
+        for (i = 0; i < baseValue.length; i++) {
+          result[i] = baseValue[i] + direction[i] * overshootCurve;
+        }
+        result;
+      } else {
+        // For single values
+        baseValue + direction * overshootCurve;
+      }
+    } else {
+      value;
+    }
+  } else {
+    value;
+  }
+} else {
+  value;
+}

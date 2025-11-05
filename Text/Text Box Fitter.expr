@@ -1,0 +1,67 @@
+// Text Box Fitter
+// Automatically adjusts box/shape size based on text length
+// Apply to: Scale or Size of a shape layer behind text
+//
+// Usage:
+// 1. Create a text layer
+// 2. Create a shape layer for background box
+// 3. Apply this expression to the shape's Scale or Size property
+// 4. Set textLayerName to your text layer's name
+
+// CONFIGURATION
+textLayerName = "Text Layer";  // Name of your text layer
+padding = 20;                   // Padding around text (in pixels)
+minWidth = 100;                 // Minimum box width
+minHeight = 50;                 // Minimum box height
+animationSpeed = 5;             // How fast box adjusts (1 = slow, 10 = instant)
+maintainAspectRatio = false;    // Keep box proportions
+
+// GET TEXT DIMENSIONS
+try {
+  textLayer = thisComp.layer(textLayerName);
+  textRect = textLayer.sourceRectAtTime(time, false);
+
+  // Calculate target dimensions with padding
+  targetWidth = Math.max(textRect.width + padding * 2, minWidth);
+  targetHeight = Math.max(textRect.height + padding * 2, minHeight);
+
+  // Get current shape dimensions
+  currentRect = thisLayer.sourceRectAtTime(time, false);
+
+  // Calculate scale factors
+  scaleX = (targetWidth / currentRect.width) * 100;
+  scaleY = (targetHeight / currentRect.height) * 100;
+
+  // Smooth animation
+  if (time > 0) {
+    prevScale = valueAtTime(time - thisComp.frameDuration);
+
+    // Interpolate
+    smoothScaleX = prevScale[0] + (scaleX - prevScale[0]) * animationSpeed * thisComp.frameDuration;
+    smoothScaleY = prevScale[1] + (scaleY - prevScale[1]) * animationSpeed * thisComp.frameDuration;
+
+    if (maintainAspectRatio) {
+      avgScale = (smoothScaleX + smoothScaleY) / 2;
+      [avgScale, avgScale];
+    } else {
+      [smoothScaleX, smoothScaleY];
+    }
+  } else {
+    if (maintainAspectRatio) {
+      avgScale = (scaleX + scaleY) / 2;
+      [avgScale, avgScale];
+    } else {
+      [scaleX, scaleY];
+    }
+  }
+
+} catch(e) {
+  // If text layer not found, return current value
+  value;
+}
+
+// BEST USED FOR:
+// - Dynamic buttons
+// - Animated labels
+// - Subtitle backgrounds
+// - Lower thirds

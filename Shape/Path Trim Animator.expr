@@ -1,0 +1,85 @@
+// Path Trim Animator
+// Smoothly animates path trimming for line drawing effects
+// Apply to: Trim Paths Start or End property
+//
+// Usage:
+// 1. Add Trim Paths to your shape
+// 2. Apply this expression to Start or End property
+// 3. Choose animation direction and timing
+// 4. Perfect for line reveals and drawing animations
+
+// CONFIGURATION
+applyTo = "end";         // Options: "start" or "end"
+startTime = 0;           // When animation starts (in seconds)
+duration = 2;            // Animation duration (in seconds)
+direction = "forward";   // Options: "forward" or "reverse"
+easeType = "smooth";     // Options: "linear", "smooth", "bounce"
+startValue = 0;          // Starting trim value (0-100)
+endValue = 100;          // Ending trim value (0-100)
+
+// EASING FUNCTIONS
+function easeInOutSmooth(t) {
+  return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
+}
+
+function bounceOut(t) {
+  if (t < 1 / 2.75) {
+    return 7.5625 * t * t;
+  } else if (t < 2 / 2.75) {
+    t -= 1.5 / 2.75;
+    return 7.5625 * t * t + 0.75;
+  } else if (t < 2.5 / 2.75) {
+    t -= 2.25 / 2.75;
+    return 7.5625 * t * t + 0.9375;
+  } else {
+    t -= 2.625 / 2.75;
+    return 7.5625 * t * t + 0.984375;
+  }
+}
+
+// CALCULATE PROGRESS
+if (time < startTime) {
+  progress = 0;
+} else if (time > startTime + duration) {
+  progress = 1;
+} else {
+  progress = (time - startTime) / duration;
+
+  // Apply easing
+  if (easeType == "smooth") {
+    progress = easeInOutSmooth(progress);
+  } else if (easeType == "bounce") {
+    progress = bounceOut(progress);
+  }
+  // else: linear (no change to progress)
+}
+
+// Reverse direction if needed
+if (direction == "reverse") {
+  progress = 1 - progress;
+}
+
+// Calculate current value
+currentValue = startValue + (endValue - startValue) * progress;
+
+// Return value based on property
+if (applyTo == "start") {
+  // For Start: animate 0 to value
+  direction == "forward" ? 0 : currentValue;
+} else {
+  // For End: animate 0 to 100
+  currentValue;
+}
+
+// COMMON SETUPS:
+//
+// Line Drawing (reveal):
+// - applyTo = "end", direction = "forward"
+// - Start: 0, End: 0 initially, animates to 100
+//
+// Line Erasing:
+// - applyTo = "start", direction = "forward"
+// - End: 100, Start animates 0 to 100
+//
+// Write-on effect:
+// - Use "bounce" easeType for pen-like feel

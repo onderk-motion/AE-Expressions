@@ -1,0 +1,81 @@
+// Exponential Growth/Decay
+// Creates exponential growth (viral spread) or decay (fade out) curves
+// Apply to: Any numeric property (Scale, Opacity, Position, etc.)
+//
+// Usage:
+// 1. Apply to any numeric property
+// 2. Choose mode: "growth" or "decay"
+// 3. Set starting and ending values
+// 4. Adjust rate for speed of change
+
+// CONFIGURATION
+mode = "growth";         // Options: "growth" or "decay"
+startTime = 0;           // When animation starts (seconds)
+duration = 3;            // Animation duration (seconds)
+startValue = 1;          // Starting value
+endValue = 100;          // Ending value
+rate = 3;                // Growth/decay rate (1 = slow, 5 = fast)
+
+// For array values (Position, Scale, etc.)
+// startValue = [0, 0];
+// endValue = [100, 100];
+
+// EXPONENTIAL FUNCTIONS
+function exponentialGrowth(t, rate) {
+  // Exponential curve: starts slow, accelerates
+  return Math.pow(t, rate);
+}
+
+function exponentialDecay(t, rate) {
+  // Exponential decay: starts fast, slows down
+  return 1 - Math.pow(1 - t, rate);
+}
+
+// CALCULATE PROGRESS
+if (time < startTime) {
+  progress = 0;
+} else if (time > startTime + duration) {
+  progress = 1;
+} else {
+  progress = (time - startTime) / duration;
+}
+
+// Apply exponential curve
+if (mode == "growth") {
+  curvedProgress = exponentialGrowth(progress, rate);
+} else {
+  curvedProgress = exponentialDecay(progress, rate);
+}
+
+// CALCULATE VALUE
+if (startValue instanceof Array) {
+  // Array values (Position, Scale, etc.)
+  result = [];
+  for (i = 0; i < startValue.length; i++) {
+    result[i] = startValue[i] + (endValue[i] - startValue[i]) * curvedProgress;
+  }
+  result;
+} else {
+  // Single values
+  startValue + (endValue - startValue) * curvedProgress;
+}
+
+// USE CASES:
+//
+// Exponential Growth:
+// - Viral spread animations
+// - Social media counter (accelerating numbers)
+// - Explosion scale (starts slow, explodes fast)
+// - Rocket launch (acceleration)
+//
+// Exponential Decay:
+// - Fade out effects (fast start, smooth end)
+// - Deceleration (car braking)
+// - Signal loss/interference
+// - Particle dissipation
+//
+// RATE GUIDE:
+// rate = 1: Linear (no curve)
+// rate = 2: Moderate curve
+// rate = 3: Strong curve (recommended)
+// rate = 5: Very dramatic curve

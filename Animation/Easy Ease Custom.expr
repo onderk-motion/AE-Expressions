@@ -1,0 +1,47 @@
+// Easy Ease (Custom Easing)
+// Manual ease in/out control without keyframes - smooth motion control
+// Apply to: Any property
+//
+// Usage:
+// 1. Apply to any property
+// 2. Adjust easeIn and easeOut values (0-100)
+// 3. Set start and end values
+// 4. Control animation with startTime and duration
+
+// CONFIGURATION
+startValue = 0;      // Starting value
+endValue = 100;      // Ending value
+startTime = 0;       // When animation starts (in seconds)
+duration = 2;        // Animation duration (in seconds)
+easeIn = 80;        // Ease in amount (0 = linear, 100 = maximum ease)
+easeOut = 80;       // Ease out amount (0 = linear, 100 = maximum ease)
+
+// EASING FUNCTION
+function easeInOutCustom(t, eIn, eOut) {
+  // Convert ease values to curve power
+  var powerIn = 1 + (eIn / 100) * 4;   // Range: 1-5
+  var powerOut = 1 + (eOut / 100) * 4; // Range: 1-5
+
+  if (t < 0.5) {
+    // Ease in (first half)
+    return Math.pow(2 * t, powerIn) / 2;
+  } else {
+    // Ease out (second half)
+    return 1 - Math.pow(2 * (1 - t), powerOut) / 2;
+  }
+}
+
+// CALCULATE CURRENT VALUE
+if (time < startTime) {
+  // Before animation starts
+  startValue;
+} else if (time > startTime + duration) {
+  // After animation ends
+  endValue;
+} else {
+  // During animation
+  progress = (time - startTime) / duration;
+  easedProgress = easeInOutCustom(progress, easeIn, easeOut);
+
+  startValue + (endValue - startValue) * easedProgress;
+}

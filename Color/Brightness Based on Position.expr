@@ -1,0 +1,76 @@
+// Brightness Based on Position
+// Changes color brightness/opacity based on layer position (proximity to light)
+// Apply to: Fill Color, Effect Color, or Opacity
+//
+// Usage:
+// 1. Apply to a color property or opacity
+// 2. Set light source position (lightPosition)
+// 3. Adjust falloff distance
+// 4. Multiple layers will respond to same light source
+
+// CONFIGURATION
+lightPosition = [960, 540];  // Light source position [X, Y] (default: comp center)
+maxDistance = 500;           // Distance at which brightness reaches minimum
+minBrightness = 0.2;         // Minimum brightness (0 = black, 1 = full)
+maxBrightness = 1.0;         // Maximum brightness at light position
+falloffType = "linear";      // Options: "linear", "quadratic", "smooth"
+use3D = false;               // Use Z-axis if working with 3D layers
+
+// GET LAYER POSITION
+layerPos = thisLayer.transform.position;
+
+// CALCULATE DISTANCE
+if (use3D && layerPos.length == 3) {
+  // 3D distance
+  dx = lightPosition[0] - layerPos[0];
+  dy = lightPosition[1] - layerPos[1];
+  dz = (lightPosition.length > 2 ? lightPosition[2] : 0) - layerPos[2];
+  distance = Math.sqrt(dx*dx + dy*dy + dz*dz);
+} else {
+  // 2D distance
+  dx = lightPosition[0] - layerPos[0];
+  dy = lightPosition[1] - layerPos[1];
+  distance = Math.sqrt(dx*dx + dy*dy);
+}
+
+// CALCULATE BRIGHTNESS FACTOR
+distanceFactor = Math.min(distance / maxDistance, 1);
+
+// Apply falloff type
+if (falloffType == "quadratic") {
+  // Realistic light falloff (inverse square)
+  brightnessFactor = 1 - Math.pow(distanceFactor, 2);
+} else if (falloffType == "smooth") {
+  // Smooth falloff (ease)
+  brightnessFactor = 1 - Math.pow(distanceFactor, 0.5);
+} else {
+  // Linear falloff (default)
+  brightnessFactor = 1 - distanceFactor;
+}
+
+// Map to brightness range
+brightness = minBrightness + (maxBrightness - minBrightness) * brightnessFactor;
+
+// APPLY TO PROPERTY TYPE
+if (value instanceof Array && value.length == 4) {
+  // Color property [R, G, B, A]
+  [
+    value[0] * brightness,
+    value[1] * brightness,
+    value[2] * brightness,
+    value[3]
+  ];
+} else if (value instanceof Array && value.length == 3) {
+  // RGB color [R, G, B]
+  [
+    value[0] * brightness,
+    value[1] * brightness,
+    value[2] * brightness
+  ];
+} else {
+  // Opacity or single value
+  value * brightness;
+}
+
+// TIP: Animate lightPosition for moving light effects
+// Example: lightPosition = [960 + Math.sin(time) * 400, 540]

@@ -1,0 +1,54 @@
+// Snap to Grid
+// Snaps layer position to a grid system for pixel-perfect alignment
+// Apply to: Position property
+//
+// Usage:
+// 1. Apply to Position property
+// 2. Set grid size (smaller = more precise, larger = coarser grid)
+// 3. Layer will snap to nearest grid point
+// 4. Perfect for pixel art, UI design, or organized layouts
+
+// CONFIGURATION
+gridSize = 10;           // Grid cell size in pixels (5, 10, 20, 50, etc.)
+snapX = true;            // Snap X position
+snapY = true;            // Snap Y position
+snapZ = false;           // Snap Z position (for 3D layers)
+offset = [0, 0];         // Grid offset [X, Y] - shifts the grid origin
+
+// SNAP FUNCTION
+function snapToGrid(val, gridSize) {
+  return Math.round(val / gridSize) * gridSize;
+}
+
+// GET CURRENT POSITION
+pos = value;
+
+// Apply snapping
+if (pos.length == 3) {
+  // 3D Position
+  [
+    snapX ? snapToGrid(pos[0] - offset[0], gridSize) + offset[0] : pos[0],
+    snapY ? snapToGrid(pos[1] - offset[1], gridSize) + offset[1] : pos[1],
+    snapZ ? snapToGrid(pos[2], gridSize) : pos[2]
+  ];
+} else {
+  // 2D Position
+  [
+    snapX ? snapToGrid(pos[0] - offset[0], gridSize) + offset[0] : pos[0],
+    snapY ? snapToGrid(pos[1] - offset[1], gridSize) + offset[1] : pos[1]
+  ];
+}
+
+// USE CASES:
+// - Pixel art animations (gridSize = 1 or 2)
+// - UI element alignment (gridSize = 5 or 10)
+// - Organized layouts (gridSize = 50 or 100)
+// - Isometric grid (gridSize = 32, offset for isometric)
+//
+// TIP: For pixel-perfect work, also disable motion blur
+// and ensure composition is at 100% scale when rendering
+
+// ADVANCED: For isometric grid
+// Set gridSize = 32 (or your iso tile size)
+// For every 2:1 isometric:
+// offset = [16, 8] (half width, quarter height)

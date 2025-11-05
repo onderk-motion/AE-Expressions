@@ -1,0 +1,59 @@
+// Oscillate (Sine Wave Oscillation)
+// Creates continuous back-and-forth motion like a pendulum
+// Apply to: Position, Rotation, Scale, or any numeric property
+//
+// Usage:
+// 1. Apply to any property
+// 2. Set amplitude (range of motion)
+// 3. Set frequency (speed of oscillation)
+// 4. Choose wave type for different motion styles
+
+// CONFIGURATION
+amplitude = 100;     // Range of motion (how far it moves)
+frequency = 1;       // Oscillations per second (1 = slow, 3 = fast)
+offset = 0;          // Starting offset/phase (0-360 degrees)
+centerValue = null;  // Center point (null = use current value)
+waveType = "sine";   // Options: "sine", "triangle", "square", "sawtooth"
+
+// Get center value
+center = (centerValue != null) ? centerValue : value;
+
+// Convert offset to radians
+offsetRad = offset * Math.PI / 180;
+
+// Calculate time-based oscillation
+t = time * frequency * 2 * Math.PI + offsetRad;
+
+// Generate wave based on type
+if (waveType == "triangle") {
+  // Triangle wave
+  wave = (2 / Math.PI) * Math.asin(Math.sin(t));
+} else if (waveType == "square") {
+  // Square wave
+  wave = Math.sin(t) >= 0 ? 1 : -1;
+} else if (waveType == "sawtooth") {
+  // Sawtooth wave
+  wave = 2 * ((t / (2 * Math.PI)) % 1) - 1;
+} else {
+  // Sine wave (default)
+  wave = Math.sin(t);
+}
+
+// Apply oscillation
+if (center instanceof Array) {
+  // For array values (Position, Scale, etc.)
+  result = [];
+  for (i = 0; i < center.length; i++) {
+    result[i] = center[i] + amplitude * wave;
+  }
+  result;
+} else {
+  // For single values (Rotation, Opacity, etc.)
+  center + amplitude * wave;
+}
+
+// USE CASES:
+// - Pendulum: rotation with sine wave
+// - Breathing: scale with slow sine wave
+// - Floating: position Y with slow sine wave
+// - Alarm light: opacity with square wave

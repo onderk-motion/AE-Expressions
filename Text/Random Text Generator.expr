@@ -1,0 +1,51 @@
+// Random Text Generator (Matrix/Glitch Effect)
+// Generates random characters for hacking/glitch/data effects
+// Apply to: Source Text property
+//
+// Usage:
+// 1. Apply to Source Text
+// 2. Choose character set (numbers, letters, symbols, etc.)
+// 3. Adjust speed and length
+// 4. Perfect for Matrix, hacking, glitch effects
+
+// CONFIGURATION
+textLength = 20;         // Number of characters to display
+changeSpeed = 10;        // Characters changes per second
+characterSet = "01";     // Character options (see below)
+groupSize = 4;           // Characters per group (0 = no grouping)
+groupSeparator = " ";    // Separator between groups
+
+// CHARACTER SET OPTIONS:
+// "01" - Binary
+// "0123456789" - Numbers only
+// "ABCDEFGHIJKLMNOPQRSTUVWXYZ" - Uppercase letters
+// "abcdefghijklmnopqrstuvwxyz" - Lowercase letters
+// "0123456789ABCDEF" - Hexadecimal
+// "!@#$%^&*" - Symbols
+// "ｱｲｳｴｵｶｷｸｹｺ" - Katakana (Japanese)
+// Mix and match as needed!
+
+// GENERATE RANDOM TEXT
+seed = Math.floor(time * changeSpeed);
+seedRandom(seed, true);
+
+output = "";
+for (i = 0; i < textLength; i++) {
+  // Add group separator
+  if (groupSize > 0 && i > 0 && i % groupSize == 0) {
+    output += groupSeparator;
+  }
+
+  // Add random character
+  randomIndex = Math.floor(random(0, characterSet.length));
+  output += characterSet.charAt(randomIndex);
+}
+
+output;
+
+// PRESETS:
+// Matrix effect: characterSet = "ｱｲｳｴｵｶｷｸｹｺｻｼｽｾｿﾀﾁﾂﾃ"
+// Binary code: characterSet = "01", groupSize = 8
+// Hex dump: characterSet = "0123456789ABCDEF", groupSize = 2
+// Scrambled text: Use full alphabet
+// Security code: characterSet = "0123456789ABCDEF", textLength = 16, groupSize = 4

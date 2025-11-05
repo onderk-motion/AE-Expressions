@@ -1,0 +1,57 @@
+// RGB Separation (Chromatic Aberration)
+// Separates RGB channels for glitch/VHS/chromatic aberration effect
+// Apply to: Position of duplicated layers (needs 3 copies)
+//
+// Usage:
+// 1. Duplicate your layer 3 times
+// 2. Set each layer's blend mode or tint to R, G, or B channel
+// 3. Apply this expression to Position of each layer
+// 4. Change 'channel' variable for each layer (0=Red, 1=Green, 2=Blue)
+
+// CONFIGURATION - CHANGE THIS FOR EACH LAYER
+channel = 0;  // 0 = Red, 1 = Green, 2 = Blue
+
+// Separation settings
+separationAmount = 5;  // Pixel offset amount (3 = subtle, 15 = extreme)
+angle = 0;             // Separation angle in degrees (0 = horizontal)
+animateSeparation = true;  // Animate the separation over time
+animationSpeed = 2;    // Speed of animation
+
+// TIME-BASED ANIMATION (optional)
+if (animateSeparation) {
+  // Oscillating separation
+  separationAmount = separationAmount * (1 + Math.sin(time * animationSpeed * Math.PI) * 0.5);
+}
+
+// CALCULATE OFFSET
+angleRad = angle * Math.PI / 180;
+
+// Different offset for each channel
+if (channel == 0) {
+  // Red - offset in negative direction
+  offsetX = -separationAmount * Math.cos(angleRad);
+  offsetY = -separationAmount * Math.sin(angleRad);
+} else if (channel == 1) {
+  // Green - no offset (center)
+  offsetX = 0;
+  offsetY = 0;
+} else {
+  // Blue - offset in positive direction
+  offsetX = separationAmount * Math.cos(angleRad);
+  offsetY = separationAmount * Math.sin(angleRad);
+}
+
+// Apply offset
+value + [offsetX, offsetY];
+
+// SETUP INSTRUCTIONS:
+// 1. Duplicate layer 3 times
+// 2. Layer 1: channel = 0, Tint to RED or use Blend Mode
+// 3. Layer 2: channel = 1, Tint to GREEN (keep original colors)
+// 4. Layer 3: channel = 2, Tint to BLUE or use Blend Mode
+// 5. Set all layers to Screen or Add blend mode
+//
+// For true RGB separation, use Channel effect:
+// Layer 1: Keep only Red channel
+// Layer 2: Keep only Green channel
+// Layer 3: Keep only Blue channel
