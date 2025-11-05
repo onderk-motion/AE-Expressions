@@ -1,0 +1,32 @@
+// Wiggle with Limits
+// Creates wiggle motion constrained between minimum and maximum values
+// Apply to: Position, Rotation, Scale, Opacity, or any numeric property
+//
+// Usage:
+// 1. Apply to any property
+// 2. Set minValue and maxValue to define the boundaries
+// 3. Adjust freq (frequency) and amp (amplitude) for wiggle characteristics
+// 4. For 2D/3D properties, limits apply to each axis
+
+freq = 2; // Wiggle frequency - times per second (1 = slow, 5 = fast)
+amp = 50; // Wiggle amplitude - intensity (10 = subtle, 100 = strong)
+
+// Define your limits here
+minValue = -100; // Minimum allowed value
+maxValue = 100;  // Maximum allowed value
+
+// Generate wiggle
+w = wiggle(freq, amp);
+
+// Constrain to limits
+if (value instanceof Array) {
+  // For arrays (Position, Scale, etc.)
+  result = [];
+  for (i = 0; i < w.length; i++) {
+    result[i] = Math.max(minValue, Math.min(maxValue, w[i]));
+  }
+  result;
+} else {
+  // For single values (Rotation, Opacity, etc.)
+  Math.max(minValue, Math.min(maxValue, w));
+}

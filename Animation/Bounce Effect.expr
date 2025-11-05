@@ -1,0 +1,30 @@
+// Bounce Effect
+// Adds a natural bounce/spring effect to your animations
+// Apply to: Position, Scale, Rotation, or any animated property
+//
+// Usage:
+// 1. Apply this expression to a property with keyframes
+// 2. Adjust 'amp' (amplitude) to control bounce intensity
+// 3. Adjust 'freq' (frequency) to control bounce speed
+// 4. Adjust 'decay' to control how quickly bounce fades
+
+amp = 0.15; // Amplitude - bounce intensity (0.05 = subtle, 0.3 = strong)
+freq = 2.0; // Frequency - bounce speed (1 = slow, 4 = fast)
+decay = 5.0; // Decay rate - how quickly it settles (3 = slow, 8 = fast)
+
+n = 0;
+if (numKeys > 0) {
+  n = nearestKey(time).index;
+  if (key(n).time > time) {
+    n--;
+  }
+}
+
+if (n == 0) {
+  value;
+} else {
+  t = time - key(n).time;
+  v = velocityAtTime(key(n).time - thisComp.frameDuration / 10);
+
+  value + v * amp * Math.sin(freq * t * 2 * Math.PI) / Math.exp(decay * t);
+}

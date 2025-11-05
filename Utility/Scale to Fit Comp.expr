@@ -1,0 +1,35 @@
+// Scale to Fit Composition
+// Automatically scales layer to fit composition dimensions (maintains aspect ratio)
+// Apply to: Scale property
+//
+// Usage:
+// 1. Apply to Scale property of any layer
+// 2. Choose fit mode: 'cover' (fills entire comp) or 'contain' (fits inside comp)
+// 3. Layer will automatically scale to fit regardless of its source dimensions
+
+// CONFIGURATION
+fitMode = "contain"; // Options: "contain" (fit inside) or "cover" (fill completely)
+
+// Get composition dimensions
+compW = thisComp.width;
+compH = thisComp.height;
+
+// Get layer source dimensions
+layerW = thisLayer.sourceRectAtTime(time, false).width;
+layerH = thisLayer.sourceRectAtTime(time, false).height;
+
+// Calculate scale ratios
+scaleX = (compW / layerW) * 100;
+scaleY = (compH / layerH) * 100;
+
+// Apply fit mode
+if (fitMode == "cover") {
+  // Use larger scale to cover entire comp
+  scaleFactor = Math.max(scaleX, scaleY);
+} else {
+  // Use smaller scale to fit inside comp (default)
+  scaleFactor = Math.min(scaleX, scaleY);
+}
+
+// Return uniform scale
+[scaleFactor, scaleFactor];

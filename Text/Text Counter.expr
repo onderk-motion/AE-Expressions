@@ -1,0 +1,59 @@
+// Text Counter (Animated Number Counter)
+// Smoothly counts from one number to another
+// Apply to: Source Text property of a text layer
+//
+// Usage:
+// 1. Create two keyframes on Source Text (or any numeric property)
+// 2. Apply this expression
+// 3. Adjust settings below for formatting
+// 4. Numbers will smoothly animate between keyframes
+
+// CONFIGURATION
+decimalPlaces = 0; // Number of decimal places (0 = whole numbers, 2 = 0.00)
+prefix = "";       // Text before number (e.g., "$" or "")
+suffix = "";       // Text after number (e.g., "%" or " items")
+useCommas = true;  // Add thousand separators (1,000 vs 1000)
+
+// COUNTER LOGIC
+if (numKeys >= 2) {
+  // Get start and end values from keyframes
+  n = nearestKey(time).index;
+  if (key(n).time > time) n--;
+
+  if (n == 0) {
+    startValue = parseInt(key(1).text);
+  } else {
+    startValue = parseInt(key(n).text);
+  }
+
+  if (n < numKeys) {
+    endValue = parseInt(key(n + 1).text);
+    startTime = key(n).time;
+    endTime = key(n + 1).time;
+
+    // Calculate progress
+    progress = (time - startTime) / (endTime - startTime);
+    progress = Math.max(0, Math.min(1, progress));
+
+    // Ease progress (optional - comment out for linear)
+    progress = ease(startValue, endValue, progress);
+
+    currentValue = startValue + (endValue - startValue) * progress;
+  } else {
+    currentValue = startValue;
+  }
+} else {
+  // No keyframes, try to parse current text
+  currentValue = parseFloat(text.sourceText) || 0;
+}
+
+// Format number
+formattedValue = currentValue.toFixed(decimalPlaces);
+
+// Add thousand separators if enabled
+if (useCommas) {
+  formattedValue = formattedValue.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
+// Add prefix and suffix
+prefix + formattedValue + suffix;

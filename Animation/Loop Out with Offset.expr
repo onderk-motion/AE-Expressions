@@ -1,0 +1,50 @@
+// Loop Out with Offset (Cycle with Progression)
+// Loops animation but adds offset each cycle - perfect for walk cycles, rolling objects
+// Apply to: Position, Rotation, or any animated property with keyframes
+//
+// Usage:
+// 1. Create your base animation with keyframes
+// 2. Apply this expression
+// 3. Adjust offsetValue to control how much it progresses per loop
+// 4. For Position: use [x, y] array. For Rotation: use single number
+
+// CONFIGURATION
+offsetValue = [100, 0]; // Offset per cycle - [x, y] for Position, or single value for Rotation
+// Examples:
+// Position moving right: [100, 0]
+// Position moving down: [0, 100]
+// Rotation spinning: 360 (use just a number, not array)
+
+// LOOP LOGIC
+if (numKeys > 0) {
+  startTime = key(1).time;
+  endTime = key(numKeys).time;
+  duration = endTime - startTime;
+
+  if (time > endTime) {
+    // How many complete loops have passed
+    cycles = Math.floor((time - startTime) / duration);
+
+    // Time within current loop
+    loopTime = ((time - startTime) % duration) + startTime;
+
+    // Get value at loop time and add offset
+    baseValue = valueAtTime(loopTime);
+
+    if (offsetValue instanceof Array) {
+      // For array values (Position, Scale, etc.)
+      result = [];
+      for (i = 0; i < baseValue.length; i++) {
+        result[i] = baseValue[i] + (offsetValue[i] * cycles);
+      }
+      result;
+    } else {
+      // For single values (Rotation, Opacity, etc.)
+      baseValue + (offsetValue * cycles);
+    }
+  } else {
+    value;
+  }
+} else {
+  value;
+}

@@ -1,0 +1,52 @@
+// Distance Between Layers
+// Calculates distance between two layers and maps it to a property value
+// Apply to: Opacity, Scale, or any numeric property
+//
+// Usage:
+// 1. Replace "TARGET_LAYER_NAME" with the name of the layer to measure distance to
+// 2. Apply to any property you want to control based on distance
+// 3. Adjust minDist and maxDist for your desired range
+// 4. Adjust minValue and maxValue for output range
+
+// CONFIGURATION
+targetLayerName = "TARGET_LAYER_NAME"; // Change this to your target layer name
+
+// Distance range (in pixels)
+minDist = 0;    // Minimum distance
+maxDist = 500;  // Maximum distance
+
+// Output value range
+minValue = 100; // Value when at minimum distance
+maxValue = 0;   // Value when at maximum distance
+
+// CALCULATION
+try {
+  // Get positions
+  thisPos = thisLayer.transform.position;
+  targetPos = thisComp.layer(targetLayerName).transform.position;
+
+  // Calculate distance
+  if (thisPos.length == 2) {
+    // 2D distance
+    dx = targetPos[0] - thisPos[0];
+    dy = targetPos[1] - thisPos[1];
+    distance = Math.sqrt(dx*dx + dy*dy);
+  } else {
+    // 3D distance
+    dx = targetPos[0] - thisPos[0];
+    dy = targetPos[1] - thisPos[1];
+    dz = targetPos[2] - thisPos[2];
+    distance = Math.sqrt(dx*dx + dy*dy + dz*dz);
+  }
+
+  // Clamp distance to range
+  distance = Math.max(minDist, Math.min(maxDist, distance));
+
+  // Map distance to output value
+  t = (distance - minDist) / (maxDist - minDist);
+  minValue + (maxValue - minValue) * t;
+
+} catch(e) {
+  // If target layer not found, return current value
+  value;
+}
