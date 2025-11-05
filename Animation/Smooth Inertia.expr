@@ -1,0 +1,35 @@
+// Smooth Inertia (Delay/Lag Effect)
+// Creates smooth follow-through animation with lag/delay
+// Apply to: Any property (Position, Scale, Rotation, Opacity, etc.)
+//
+// Usage:
+// 1. Apply to a property (can be animated or linked to another layer)
+// 2. Adjust 'delay' for how much lag you want (higher = more lag)
+// 3. Adjust 'smoothness' for how smooth the transition is
+// 4. For following another layer: replace 'value' with thisComp.layer("LayerName").transform.position
+
+delay = 5; // Response time - higher = more lag (3 = quick, 10 = slow)
+smoothness = 80; // Smoothness percentage (50 = loose, 95 = very smooth)
+
+n = 0;
+if (numKeys > 0) {
+  n = nearestKey(time).index;
+  if (key(n).time > time) {
+    n--;
+  }
+}
+
+if (n > 0) {
+  t = time - key(n).time;
+
+  if (t < delay) {
+    v = velocityAtTime(key(n).time - thisComp.frameDuration / 10);
+    vt = key(n).value + v * t;
+
+    value + (vt - value) * smoothness / 100;
+  } else {
+    value;
+  }
+} else {
+  value;
+}

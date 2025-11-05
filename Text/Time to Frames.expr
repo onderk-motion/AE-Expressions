@@ -1,0 +1,53 @@
+// Time to Frames (Timecode Display)
+// Displays current time as frame number or timecode
+// Apply to: Source Text property of a text layer
+//
+// Usage:
+// 1. Apply to Source Text of a text layer
+// 2. Choose display mode: "frames", "timecode", or "seconds"
+// 3. Timecode displays as HH:MM:SS:FF format
+// 4. Optionally offset the start frame/time
+
+// CONFIGURATION
+displayMode = "frames"; // Options: "frames", "timecode", "seconds"
+startOffset = 0; // Start counting from this number (e.g., 1001 for film)
+useCompTime = true; // true = use comp time, false = use layer time
+
+// Get current time
+currentTime = useCompTime ? time : time - inPoint;
+
+// Get frame rate
+fps = thisComp.frameDuration;
+frameRate = 1 / fps;
+
+// Calculate frame number
+currentFrame = Math.floor(currentTime * frameRate) + startOffset;
+
+// Format output based on mode
+if (displayMode == "timecode") {
+  // Calculate timecode components
+  totalFrames = Math.floor(currentTime * frameRate);
+
+  frames = totalFrames % Math.floor(frameRate);
+  totalSeconds = Math.floor(totalFrames / frameRate);
+  seconds = totalSeconds % 60;
+  totalMinutes = Math.floor(totalSeconds / 60);
+  minutes = totalMinutes % 60;
+  hours = Math.floor(totalMinutes / 60);
+
+  // Pad with zeros
+  function pad(num, size) {
+    var s = "0" + num;
+    return s.substr(s.length - size);
+  }
+
+  pad(hours, 2) + ":" + pad(minutes, 2) + ":" + pad(seconds, 2) + ":" + pad(frames, 2);
+
+} else if (displayMode == "seconds") {
+  // Display as seconds with 2 decimal places
+  currentTime.toFixed(2) + "s";
+
+} else {
+  // Display as frame number (default)
+  currentFrame.toString();
+}

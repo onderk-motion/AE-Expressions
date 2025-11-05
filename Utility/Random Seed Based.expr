@@ -1,0 +1,41 @@
+// Random Seed Based
+// Generates controllable random values using seed - same seed = same random values
+// Apply to: Any property (Position, Rotation, Scale, Opacity, etc.)
+//
+// Usage:
+// 1. Apply to any property
+// 2. Change 'seed' value to get different random results
+// 3. Same seed on multiple layers = same random value (useful for consistency)
+// 4. Adjust min and max range for your needs
+
+// CONFIGURATION
+seed = 1; // Change this to get different random values (1, 2, 3, etc.)
+
+minValue = 0;   // Minimum random value
+maxValue = 100; // Maximum random value
+
+// For Position or multi-dimensional properties, you can set individual ranges:
+// minValueX = 0;
+// maxValueX = 1920;
+// minValueY = 0;
+// maxValueY = 1080;
+
+// RANDOM GENERATION
+seedRandom(seed, true);
+randomValue = random(minValue, maxValue);
+
+// For array values (Position, Scale, etc.)
+if (value instanceof Array) {
+  result = [];
+  for (i = 0; i < value.length; i++) {
+    seedRandom(seed + i, true);
+    result[i] = random(minValue, maxValue);
+  }
+  result;
+} else {
+  // For single values
+  randomValue;
+}
+
+// TIP: Use layer index as seed for unique values per layer
+// seed = index;

@@ -1,0 +1,43 @@
+// Rotation from Velocity
+// Automatically rotates layer based on its movement direction
+// Apply to: Rotation property
+//
+// Usage:
+// 1. Animate the Position property of your layer
+// 2. Apply this expression to the Rotation property
+// 3. Adjust 'smoothness' if rotation is too jittery
+// 4. Adjust 'offset' to correct the default facing direction
+
+// CONFIGURATION
+smoothness = 0.1; // Higher = smoother but more lag (0.05 = responsive, 0.2 = smooth)
+offset = 0; // Rotation offset in degrees (0, 90, 180, 270)
+
+// Get position property
+pos = thisLayer.transform.position;
+
+// Calculate velocity
+vel = pos.velocityAtTime(time);
+
+// Calculate angle from velocity
+if (vel[0] != 0 || vel[1] != 0) {
+  targetAngle = Math.atan2(vel[1], vel[0]) * 180 / Math.PI;
+
+  // Smooth the rotation
+  if (time > 0) {
+    previousAngle = valueAtTime(time - thisComp.frameDuration);
+
+    // Handle angle wrapping
+    diff = targetAngle - previousAngle;
+    if (diff > 180) {
+      diff -= 360;
+    } else if (diff < -180) {
+      diff += 360;
+    }
+
+    previousAngle + diff * smoothness + offset;
+  } else {
+    targetAngle + offset;
+  }
+} else {
+  value;
+}
